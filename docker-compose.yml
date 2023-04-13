@@ -1,0 +1,25 @@
+version: "3"
+services:
+    forwardle:
+      image: manhtai/forwardle:latest
+      ports:
+        - "4000:4000"
+      depends_on:
+        - postgres
+      build:
+        context: .
+      environment:
+        DATABASE_URL: "postgres://postgres:postgres@postgres/postgres"
+        SECRET_KEY_BASE: "${SECRET_KEY_BASE}"
+        URL_HOST: "${URL_HOST:-localhost}"
+        URL_SCHEMA: "${URL_SCHEMA:-http}"
+        URL_PORT: "${URL_PORT:-4000}"
+
+    postgres:
+        image: postgres:14.5
+        ports:
+          - "${DATABASE_PORT:-5432}:5432"
+        environment:
+          - POSTGRES_HOST_AUTH_METHOD=trust
+        volumes:
+          - ".data/postgresql:/var/lib/postgresql/data"
