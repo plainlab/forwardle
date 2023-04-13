@@ -1,0 +1,11 @@
+<ul class="space-y-4">
+  <li>
+    Email address:
+    <span class="font-bold"><%= @user.email %></span>
+  </li>
+  <li>
+    <.link navigate={~p"/user/logout"} class="text-zinc-500 hover:text-zinc-700">
+      Log out
+    </.link>
+  </li>
+</ul>
