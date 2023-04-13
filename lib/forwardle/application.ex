@@ -7,6 +7,8 @@ defmodule Forwardle.Application do
 
   @impl true
   def start(_type, _args) do
+    maybe_run_migrations()
+
     children = [
       # Start the Telemetry supervisor
       ForwardleWeb.Telemetry,
@@ -34,5 +36,11 @@ defmodule Forwardle.Application do
   def config_change(changed, _new, removed) do
     ForwardleWeb.Endpoint.config_change(changed, removed)
     :ok
+  end
+
+  defp maybe_run_migrations() do
+    unless Application.get_env(:forwardle, :skip_migrations) do
+      Forwardle.ReleaseTasks.init()
+    end
   end
 end
