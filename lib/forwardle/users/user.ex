@@ -30,7 +30,7 @@ defmodule Forwardle.Users.User do
   def changeset(user_or_changeset, attrs) do
     user_or_changeset
     |> pow_changeset(attrs)
-    |> cast(attrs, [:api_token, :account_id, :role])
+    |> cast(attrs, [:account_id, :role])
     |> pow_extension_changeset(attrs)
   end
 end

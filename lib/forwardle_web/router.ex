@@ -3,8 +3,6 @@ defmodule ForwardleWeb.Router do
 
   use ForwardleWeb, :router
 
-  use Pow.Phoenix.Router
-
   use Pow.Extension.Phoenix.Router,
     extensions: [PowResetPassword]
 
@@ -35,42 +33,44 @@ defmodule ForwardleWeb.Router do
       error_handler: Pow.Phoenix.PlugErrorHandler
   end
 
-  # Registration
+  # Public
   scope "/", ForwardleWeb do
     pipe_through [:browser, :not_authenticated]
 
     get "/signup", RegistrationController, :new, as: :signup
     post "/signup", RegistrationController, :create, as: :signup
+
+    get "/login", SessionController, :new, as: :login
+    post "/login", SessionController, :create, as: :login
   end
 
   # User
   scope "/user", ForwardleWeb do
     pipe_through [:browser, :protected]
 
-    get("/change-password", RegistrationController, :edit, as: :account)
-    put("/change-password", RegistrationController, :update, as: :account)
-
-    get("/account", UserController, :show, as: :account)
+    get "/change-password", RegistrationController, :edit, as: :account
+    put "/change-password", RegistrationController, :update, as: :account
+    get "/account", UserController, :show, as: :account
+    get "/logout", SessionController, :delete, as: :logout
   end
 
   # Flows
-  scope "/flows", ForwardleWeb do
+  scope "/"  do
+    pipe_through [:browser, :protected]
+
+    get "/flows", ForwardleWeb.FlowController, :list, as: :flow
   end
 
-  # Public
+  # Pages
   scope "/" do
     pipe_through [:browser]
 
-    pow_routes()
-    pow_extension_routes()
-
-    scope "/", ForwardleWeb do
-      get "/", PageController, :home
-    end
+    get "/", ForwardleWeb.PageController, :home
   end
 
   scope "/" do
     pipe_through [:browser, :protected, :admin_user]
+
     live_dashboard "/dashboard", metrics: ForwardleWeb.Telemetry, ecto_repos: [Forwardle.Repo]
   end
 

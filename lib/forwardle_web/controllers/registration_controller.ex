@@ -7,7 +7,7 @@ defmodule ForwardleWeb.RegistrationController do
   def new(conn, _params) do
     changeset = Pow.Plug.change_user(conn)
 
-    render(conn, "new.html", changeset: changeset)
+    render(conn, :new, changeset: changeset, layout: false)
   end
 
   def create(conn, %{"user" => user_params}) do
@@ -21,7 +21,7 @@ defmodule ForwardleWeb.RegistrationController do
         |> redirect(to: "/")
 
       {:error, _op, changeset, _changes} ->
-        render(conn, "new.html", changeset: changeset)
+        render(conn, :new, changeset: changeset, layout: false)
     end
   end
 
