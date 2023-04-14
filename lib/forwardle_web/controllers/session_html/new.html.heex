@@ -1,0 +1,23 @@
+<div class="mx-auto max-w-sm mt-8">
+  <.header class="text-center leading-6 text-2xl">
+    Log in to your account
+    <:subtitle>
+      No account?
+      <.link navigate={~p"/signup"} class="font-semibold text-brand hover:underline">Register</.link>
+      instead.
+    </:subtitle>
+  </.header>
+
+  <.simple_form :let={f} for={@changeset} action={~p"/login"}>
+    <.error :if={@changeset.action == :insert}>
+      Oops, something went wrong! Please check the errors below.
+    </.error>
+
+    <.input field={f[:email]} type="email" label="Email" required />
+    <.input field={f[:password]} type="password" label="Password" required />
+
+    <:actions>
+      <.button phx-disable-with="Registering account..." class="w-full">Log In</.button>
+    </:actions>
+  </.simple_form>
+</div>
